@@ -22,37 +22,14 @@ namespace ExploreCalifornia.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            var posts = new[]
-            {
-                new Post
-                {
-                    Title = "My blog post",
-                    Posted = DateTime.Now,
-                    Author = "Jess Chadwick",
-                    Body = "This is a great blog post, don't you think?",
-                },
-                new Post
-                {
-                    Title = "My second blog post",
-                    Posted = DateTime.Now,
-                    Author = "Jess Chadwick",
-                    Body = "This is ANOTHER great blog post, don't you think?",
-                },
-            };
-
+            var posts = _db.posts.OrderByDescending(x => x.Posted).Take(5).ToArray();
             return View(posts);
         }
 
         [Route("{year:min(2000)}/{month:range(1,12)}/{key}")]
         public IActionResult Post(int year, int month, string key)
         {
-            var post = new Post
-            {
-                Title = "My blog post",
-                Posted = DateTime.Now,
-                Author = "Jess Chadwick",
-                Body = "This is a great blog post, don't you think?",
-            };
+            var post = _db.posts.FirstOrDefault(x => x.key == key);
 
             return View(post);
         }
@@ -76,7 +53,16 @@ namespace ExploreCalifornia.Controllers
             _db.posts.Add(post);
             _db.SaveChanges();
 
-            return View();  
+            return RedirectToAction("post", "Blog", new
+            {
+                year = post.Posted.Year,
+                month = post.Posted.Month,
+                key = post.key
+
+
+            }
+                ) ; 
+            
         }
 
         

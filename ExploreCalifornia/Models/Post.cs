@@ -37,7 +37,7 @@ namespace ExploreCalifornia.Models
         public string Title { get; set; }
         public string Author { get; set; }
         [Required]
-        [StringLength(100, ErrorMessage = "Blog posts must be at least 100 characters long")]
+        [StringLength(1000 ,MinimumLength = 100, ErrorMessage = "Blog posts must be at least 100 characters long")]
         [DataType(DataType.MultilineText)]
         public string Body { get; set; }
         public DateTime Posted { get; set; }
